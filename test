@@ -1,0 +1,26 @@
+Synchronous Patterns
+Pattern	Use When	Best Fit For	Watch Out For
+Request / Response (REST)	Real-time queries, balance lookups, auth decisions	Low latency, stateless, cacheable	Tight coupling; consumer blocked until provider responds
+GraphQL Federated API	Composite data across CRM, MDM, Core Banking	Flexible queries; reduces over-fetching for mobile/web	N+1 query risk; resolver complexity
+gRPC / Protobuf	High-throughput internal microservice calls	Strongly typed, binary efficient, bi-directional streaming	Not human-readable; tooling maturity varies
+
+Asynchronous Patterns
+Pattern	Use When	Best Fit For	Watch Out For
+Event Streaming (Kafka)	Domain events, audit trails, real-time analytics	Decoupled; replay; fan-out to multiple consumers	Message ordering guarantees; at-least-once semantics
+Message Queue (Point-to-Point)	Guaranteed delivery, work distribution	Load leveling; exactly-once processing	Queue depth monitoring; DLQ management discipline required
+Pub/Sub (Topic-based)	Broadcast domain changes to unknown consumers	Loose coupling; new consumers without producer changes	No guaranteed consumer acknowledgment without patterns
+Saga / Choreography	Long-running distributed transactions (loan, account open)	No central coordinator; resilient to partial failure	Debugging complexity; compensating transactions required
+
+2.3  Push Patterns
+Pattern	Use When	Best Fit For	Watch Out For
+Webhook / HTTP Callback	Provider-initiated events to external partners	Simple; no polling; real-time	Retry logic; HMAC signature validation required
+Server-Sent Events (SSE)	Server pushes unidirectional stream to browser/client	Lightweight; auto-reconnect; no WebSocket overhead	One-way only; HTTP/2 multiplexing needed at scale
+CDC (Change Data Capture)	Legacy DB changes pushed as events without app changes	Non-invasive; decouples legacy system from consumers	Schema evolution governance; log retention management
+
+2.4  Pull Patterns
+Pattern	Use When	Best Fit For	Watch Out For
+Polling / Scheduled Batch	Legacy systems without event capability	Simple; no infrastructure changes on source side	Latency; load spikes; not suitable for real-time
+File-Based Pull (SFTP / S3)	Large dataset transfers, regulatory reporting	Decoupled; audit-friendly; widely supported	No real-time; error handling at file granularity
+Data Virtualization / API Wrapping	Legacy system exposed as modern API without refactoring	Consumer sees modern interface; legacy unchanged	Performance ceiling of underlying legacy system
+
+
