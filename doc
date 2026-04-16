@@ -1,0 +1,108 @@
+Enterprise Integration Metamodel
+A Behavior-Based Governance Framework for Post-M&amp;A Banking Architecture
+
+1. Executive Summary
+As our banking ecosystem expands through M&amp;A and modernization initiatives, our
+Architecture Review Board (ARB) processes must scale. Currently, integration governance
+is highly subjective, often focusing on vendor tooling rather than architectural behavior.
+This framework introduces a strict 6-Layer Enterprise Integration Metamodel. By
+separating the &#39;Why&#39; and &#39;When&#39; of an integration from the &#39;What&#39; and &#39;Which tool,&#39; we
+transition from subjective gatekeeping to objective, &#39;Paved Road&#39; governance. This
+approach contains legacy technical debt, standardizes cross-core communication, and
+accelerates time-to-market.
+
+2. The 6-Layer Governance Taxonomy
+Every enterprise integration must be classified across the following six distinct dimensions
+before vendor tooling is selected:
+Level Classification Question Answered Banking Context &amp;
+Examples
+
+L1 Boundary Context WHERE does it live? North-South (Edge),
+East-West (Cross-
+Core), Intra-Domain
+
+L2 Architecture Layer WHY are we doing
+
+this?
+
+Experience (UI),
+Process
+(Orchestration),
+System (Core ACL),
+Data Fabric
+
+L3 Interaction Style WHEN does it
+move?
+
+Synchronous
+(Blocking) vs.
+Asynchronous (Non-
+Blocking)
+
+L4 Logical Pattern HOW is it
+structured?
+
+API Façade, Saga
+Orchestrator,
+Pub/Sub, Anti-
+Corruption Layer
+(ACL)
+
+L5 Standard Protocol WHAT is the
+standard?
+
+REST/JSON,
+gRPC/Protobuf,
+Kafka Wire Protocol,
+
+AMQP
+
+L6 Approved Platform WHICH tool is used? Broadcom Layer7,
+K8s, Confluent
+Kafka, IBM MQ,
+(Legacy
+Containment)
+
+3. The Unified Interaction Style Matrix (Level 3 &amp; 4)
+The ARB mandates a strict binary split at the Interaction Style level. Developers must first
+answer: &#39;Can the client afford to wait?&#39;
+A. Synchronous (Blocking)
+The consumer thread blocks and waits for an immediate response. Temporal coupling is
+high.
+ • RESTful (Request/Response): Real-time queries &amp; auth decisions. (Risk: Tight
+coupling)
+ • GraphQL (Federated API): Mobile/Web composite data (BFF). (Risk: Core query
+overload)
+ • gRPC / Protobuf: High-throughput internal East-West calls. (Risk: Binary, tooling
+support)
+ • API Façade / Anti-Corruption Layer: Semantic isolation of legacy cores.
+B. Asynchronous (Non-Blocking)
+The thread releases; processing happens later. Categorized by routing control:
+1. B.1 Targeted (Commands - 1-to-1)
+ • Message Queue (P2P): Guaranteed delivery. e.g., &#39;Execute Payment&#39;.
+ • Saga / Choreography: Long-running distributed transactions spanning multiple
+cores.
+2. B.2 Broadcast (Event/Push - 1-to-Many)
+ • Event Streaming (Kafka): &#39;Fact&#39; distribution. e.g., &#39;Account Opened&#39;.
+ • Change Data Capture (CDC): Legacy DB changes published as events.
+ • Webhooks: External push notifications to B2B partners.
+3. B.3 Deferred (Pull/Batch - Consumer Driven)
+ • Scheduled Batch / ETL: Legacy synchronization (EOD Ledger).
+ • Claim Check / MFT: Massive payload retrieval (e.g., 2GB Loan Documents).
+
+4. ARB Guardrails &amp; Legacy Containment
+Strategic Paved Roads: Net-new integrations must utilize Broadcom Layer7 for edge
+security, Kubernetes (Spring Boot/Go) for orchestration, and Kafka/IBM MQ for state
+distribution. Teams following these paths receive expedited ARB approval.
+Legacy Containment (TIBCO / MuleSoft): Older ESB platforms are strictly contained.
+They are approved ONLY for existing legacy interactions and may not be utilized to
+orchestrate net-new digital channel (Experience Layer) workflows.
+
+5. Practical Application: Cross-Bank Transfer (M&amp;A)
+How the framework defines a transfer between the Main Bank and an Acquired Bank Core:
+ • L1 Boundary: East-West (Cross-Core)
+ • L2 Layer: Process (Orchestration)
+ • L3 Style: Asynchronous Targeted (Command)
+ • L4 Pattern: Saga (To handle potential rollbacks across distributed ledgers)
+ • L5 Protocol: AMQP
+ • L6 Platform: K8s Worker + IBM MQ
