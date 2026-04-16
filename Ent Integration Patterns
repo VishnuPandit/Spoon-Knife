@@ -1,0 +1,30 @@
+## Draw.io CSV Import Configuration
+# label: <b style="font-size:14px">%name%</b><br><hr style="border: 1px solid #ccc;"><i style="font-size:11px">%desc%</i><br><br><span style="font-size:10px; color:#555;"><i>%tradeoff%</i></span>
+# style: whiteSpace=wrap;html=1;rounded=1;fillColor=%fill%;strokeColor=#1f4e78;fontColor=%fontColor%;align=center;verticalAlign=top;collapsible=1;treeFolding=1;
+# namespace: csvimport-
+# connect: {"from": "parent", "to": "id", "invert": true, "style": "edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1f4e78;"}
+# width: 220
+# height: 95
+# layout: horizontalflow
+# nodespacing: 25
+# levelspacing: 60
+## CSV Data
+id,name,desc,tradeoff,fill,fontColor,parent
+root,Enterprise Integration Patterns,Approved ARB Catalog,Unified Metamodel,#1f4e78,#ffffff,
+SYNC,Synchronous (Blocking),Consumer waits for immediate response.,Temporal Coupling: High,#deeaf6,#000000,root
+SYNC_REST,RESTful (Request/Response),Real-time queries & auth decisions.,Risk: Tight coupling; consumer blocked.,#ffffff,#000000,SYNC
+SYNC_GQL,GraphQL (Federated API),Mobile/Web composite data (BFF).,Risk: N+1 query overload on core.,#ffffff,#000000,SYNC
+SYNC_GRPC,gRPC / Protobuf,High-throughput internal K8s calls.,Risk: Not human-readable; needs HTTP/2.,#ffffff,#000000,SYNC
+SYNC_VIRT,API Façade / Wrapper,Modern interface over legacy core.,Risk: Bound by legacy performance ceiling.,#ffffff,#000000,SYNC
+ASYNC,Asynchronous (Non-Blocking),Thread releases; processed later.,Temporal Coupling: Low,#deeaf6,#000000,root
+ASYNC_CMD,Targeted (Commands),1-to-1 async execution.,Intent: Do this specific task.,#e2efda,#006100,ASYNC
+CMD_MQ,Message Queue (P2P),Guaranteed delivery & load leveling.,Risk: Queue depth limits; DLQ needed.,#ffffff,#000000,ASYNC_CMD
+CMD_SAGA,Saga / Choreography,Long-running distributed transactions.,Risk: High complexity; requires rollbacks.,#ffffff,#000000,ASYNC_CMD
+ASYNC_EVT,Broadcast (Event/Push),1-to-Many state distribution.,Intent: This fact just happened.,#e2efda,#006100,ASYNC
+EVT_STREAM,Event Streaming (Kafka),Audit trails & real-time analytics.,Risk: Message ordering guarantees.,#ffffff,#000000,ASYNC_EVT
+EVT_CDC,Change Data Capture (CDC),Push legacy DB changes as events.,Risk: Schema evolution & log retention.,#ffffff,#000000,ASYNC_EVT
+EVT_WEBHOOK,Webhook / HTTP Callback,Push events to external partners.,Risk: Retry logic & HMAC validation needed.,#ffffff,#000000,ASYNC_EVT
+EVT_SSE,Server-Sent Events (SSE),Unidirectional stream to browser.,Risk: One-way only; scales poorly without HTTP/2.,#ffffff,#000000,ASYNC_EVT
+ASYNC_DEF,Deferred (Pull/Batch),Consumer controls retrieval timing.,Intent: I will get it when ready.,#e2efda,#006100,ASYNC
+DEF_BATCH,Polling / Scheduled Batch,Legacy system integration.,Risk: Load spikes; data is immediately stale.,#ffffff,#000000,ASYNC_DEF
+DEF_MFT,File-Based Pull (SFTP/S3),Massive regulatory/clearing datasets.,Risk: Error handling is at file granularity.,#ffffff,#000000,ASYNC_DEF
