@@ -1,0 +1,140 @@
+800-01-001	Information Security Standards	
+All applications and devices connected to the Bank's enterprise network must adhere to the Bank's published Information Security Standards.
+
+Information Security Standards	ALL
+800-01-002	Applicability of IS Standards to 4th Parties (non-customer/non-CIAM)	
+External Users of Third Parties are Fourth Parties: External users of a third party shared platform (eg, RFP360, iCertis, Coupa, Docusign) are considered fourth party users.
+Fourth Party Users are Not Subject to IS Standards: Fourth party users are not directly subject to IS Standards. It is the responsibility of the Third Party partner engaging the Fourth Party to ensure that all services executed on behalf of the Bank comply with all contractual obligations.
+Information Security Standards	N/A
+800-03-001	Architecture Security Consultation (ASC) Requirements	
+The ASC process must be completed with the associated ServiceNow ticket (RITM) and SCTask in Closed and Approved status prior to coming to ARG for Design Review.
+All information presented in the SDP must match the information documented in the Architecture Security Consultation (ASC) review, and the ASC must have been completed within 12 months of visiting the ARG for Design Review (DR) or Production Readiness Review (PRR). Discrepancies will trigger a redo of the ASC and may delay project timelines.
+
+N/A
+800-03-002	ECSO SDP Review Criteria	
+The following criteria is reviewed against and enforced by ECSO during ARG Design Review, as well as re-validated for ARG Production Readiness Review:
+
+Information Security (IS) Standards Non-Conformance: Non-conformance with IS Standards must be documented as a Security Exception per IS Standard through the Information Security Standard Exception process. For example, all violations of the IS Identity and Access Management (IAM) Standards would be submitted under a single security exception for that standard.
+Section 2.2 Physical Architecture: This section must be completed in accordance with the following requirements:
+A current Physical Architecture Diagram must be included at a high enough graphic resolution to make all components readable.
+All connector lines must have a clear port, protocol, and authentication method label, including clear indication whether the protocol is using Bank-approved encryption.
+All integrations from section 5 must be represented, except where the integration mechanism is not a straight passthrough (eg, proxy or gateway) and terminates the connection (eg, Sterling, MQ, Kafka), which would then be the integration point represented in the diagram.
+Section 2.10.1 Firewall Rules: This section is slated for removal and will no longer be reviewed or validated.
+Section 2.10.2.1 User Base, Access, Roles and Provisioning: This section must clearly document:
+What identity provider (IdP) is in use,
+Whether SSO is being implemented,
+Explicit details about provisioning of users (eg, use of UAP/Sailpoint, manual processes),
+If MFA is being implemented,
+What roles are being supported,
+If any of those roles constitute privileged access, and
+If privileged access, then is it implemented in accordance with Privileged Access Management (PAM) requirements.
+Section 2.10.2.2 Authentication and Authorization: This section is slated for removal and will no longer be reviewed or validated. All User IAM, IGA, and PAM descriptions must be added to Section 2.10.2.1.
+Section 2.10.2.3 Service Accounts: This section must be completed for all Non-Human Access (e.g., service account, API client credential, AWS IAM Role, Azure/M365 Service Principal, etc.) used by the solution including a statement attesting to meeting Service Account management requirements (eg, vaulting in an ECSO-approved PAM solution).
+Section 2.10.3 Digital Certificates: All digital certificates managed by the product team must be fully documented.
+Section 2.10.4 Data: The highest data classification must be represented. Any privacy, industry, and/or regulatory compliance requirements must be listed.
+Section 2.11 Exceptions and Deviations: All Exceptions, SIIs, and Observations must be listed with pertinent metadata, which includes the ID, a short description, and the status and disposition of the request. Any Security Exceptions that are denied will be grounds for Security voting "Not Approved."
+Section 6.6.1 Logging: Security event logging must be implemented in accordance with the Information Security Logging and Monitoring Standards.
+Information Security Standards	
+2.2
+
+2.10.*
+
+2.11
+
+6.6.1
+
+800-04-001	ECSO Enterprise IAM Criteria	
+SSO Integration Requirement: Integration with a Bank-approved Single Sign-On (SSO) provider is a non-functional requirement for all new projects.
+If a service is net-new and SSO integration is supported, then SSO integration must be implemented.
+If a service is existing and SSO integration is supported, then SSO integration should be pursued at the earliest opportunity.
+Preferred IDP: Okta is the preferred SSO identity provider and should be used in lieu of other options.
+Enterprise SSO Okta Protocol Requirement: Information systems must integrate with the Bank's Okta ESSO using SAML 2.0 or OIDC/Oauth2.
+Deprecated IDP: No new integrations with Ping One will be supported for SSO. Okta must be used instead.
+Limits on AD for SSO: FCB AD integration for internal SSO purposes is only permissible with Integrated Windows Authentication (IWA) using Kerberos (primary) or NTLMv2 (if Kerberos is not available), and only if Okta integration is not possible. LSVB AD integration is deprecated and not permissible. Other legacy protocol support may be permitted at the express permission of the IAM control owner, and only for the minimum duration necessary to facilitate upgrading to modern protocols.
+MFA Is Not Transitive: MFA must occur at the point of login. Implied MFA via Zscaler does not meet this requirement, but proxied access via Cyberark (PAM) does.
+PAM Requirement: All privileged account credentials must be vaulted in PAM.
+
+2.10.2.*
+800-04-002	ECSO Customer IAM (CIAM) Criteria	
+CIAM IDP Mandate: Client-facing applications should enroll and integrate with the Bank's Customer Identity Provider (IdP) for human customer identity management.
+CIAM IDP Protocol Requirement: Applications should integrate with the Bank’s Okta CIAM (or Okta CSSO) using SAML 2.0 or OIDC.
+
+N/A
+800-04-003	Identity Governance & Administration (IGA) Criteria	
+IGA Must Be Used: The access management life cycle must be managed by an approved Identity Governance & Administration (IGA) platform.
+Approved IGA Platforms: The primary approved IGA is User Access Portal (UAP). The secondary approved IGA for LSVB is SailPoint, but only for legacy app support.
+
+2.10.2.*
+800-05-001	API General Security Criteria	
+API Inventory: A full and accurate inventory of APIs must be actively maintained, including processes for detecting and removing deprecated/unused APIs. 
+Security Event Logging: Security event logging must be implemented in alignment with the Information Security Logging and Monitoring Standards. 
+API Gateways: APIs may only be publicly exposed via an approved API gateway.
+Enterprise Technology Offerings (Abacus)	5
+800-05-002	API Data Protection Criteria	
+Transport Encryption: Network protocols used to access Bank APIs must implement Bank-approved encryption (e.g., TLS 1.2+ using HTTPS). 
+Protect Sensitive Data: Confidential and Restricted data must not be passed in an unsafe manner.
+Payload Protection: Data payload (eg, request, response) integrity should be evaluated through cryptographic mechanisms (eg, HMAC).
+Cryptography Standards
+
+Data Classification and Protection Standards
+
+2.10.4
+800-05-003	API Application Security Criteria	
+Address Resource Consumption Threats: API implementations must address resource consumption threats, such as through implementation of automated rate limiting capabilities. 
+Injection Protection: All requests and responses must be validated to protect against common injection attacks, such as Server-Side Request Forgery (SSRF) and Cross-Site Scripting, using techniques including input validation, output encoding, and error handling.
+Threat and Vulnerability Management Standards
+
+Secure Systems and Applications Development Standards
+
+N/A
+800-05-004	API Authentication Criteria	
+The following authentication criteria must be met in API/Middleware implementations:
+
+All API calls must be properly authenticated in accordance with this TUG and the IS Standards (no implicit trust). 
+A Bank-approved Identity Provider (IdP) must be used for all API authentication services. 
+Only the following authentication methods are permissible, in order of preference: 
+OAuth 2.0 Access Tokens 
+Mutual TLS (mTLS) using certificate from Bank-approved CA 
+Basic Authentication over encrypted channel (as a last resort only and requiring ECSO approval) 
+Personal Access Tokens (e.g., for Github) must only be employed on an exceptional basis, and with explicit ECSO approval to authenticate/authorize user-to-service API calls (i.e., OAuth demonstrated to be non-viable integration method). 
+Authentication materials/credentials must be properly secured. OAuth 2.0 and Basic Authentication credentials must be stored in a Bank-approved vault (eg, Cyberark/PAM, Apigee) and must not be embedded in code or configuration files.
+The use of token passthrough is not permitted. Gateways must generate a properly scoped token for accessing services on the far side of the call. The actor's presented token should be mapped to an appropriate scope to ensure the original context is maintained.
+IAM Standards
+
+Secure Systems and Applications Development Standards
+
+2.10.2.*
+800-05-005	API Authorization Criteria	
+The following authorization criteria must be met in API/Middleware implementations:
+
+All API calls must be properly authorized in accordance with this TUG and the IS Standards (no implicit trust).
+All access provided by APIs must apply the principle of least privilege, ensuring the minimum functional and data exposure required for the designed API function.
+Authorization rules must be designed for all levels, including objects, object properties, functions, business flows, and data.
+Authorization servers must associate access tokens with certain resource servers and actions on that resource server.
+Authorization checks for user attributes (eg, job code, department), user groups, and user roles must be implemented where possible.
+IAM Standards
+
+Secure Systems and Applications Development Standards
+
+2.10.2.*
+800-05-006	API OAuth Configuration Criteria	
+OAuth2.0 is the preferred method for authenticating and authorizing API calls. Integrations must adhere to the following guidelines: 
+
+Access Tokens must only be issued following successful authentication of the user or service, by the approved Identity Provider, in the context of an OAuth2.0 Grant 
+Supported Grants include: OpenID Connect Authorization Code with PKCE (user flows); OAuth2.0 Authorization Code with PKCE (user flows); Authorization Code (user flows); and Client Credentials (non-human flows). Use of implicit flow is prohibited. 
+Access Tokens must contain authorization information (i.e., scopes and/or user claims) to support coarse-grained authorization decisions by the API implementation. 
+Access Tokens must be cryptographically signed to ensure their integrity.
+Access Token Time to Live (TTL) must be set, and the duration must be as short as possible (industry guidelines are 5-15 minutes) and not to exceed 60 minutes. A refresh token may be used to maintain user sessions. However, the TTL should be strictly limited and must not exceed 30 days, after which re-authentication is required.
+Access Tokens must be restricted to certain resources (audience restriction), preferably to a single resource server. 
+Access Tokens should be sender-constrained (eg, mTLS, DPoP). Sender-constrained Access Tokens scope the applicability of access tokens to a dedicated sender. In this scenario, the resource server verifies that the token originates from a known and authorized source and is valid, before giving the required access to the resources. 
+Sensitive data must not be included in Access Tokens, unless the data is encrypted or otherwise obfuscated (eg, opaque tokens). 
+Tokens – specifically Access and Refresh – returned to an end-user’s browser must not be stored via Browser Persistent Storage APIs (e.g., LocalStorage, SessionStorage, IndexedDB).
+
+N/A
+800-05-007	API Cross-Origin Resource Sharing (CORS) Configuration Criteria	
+CORS requests must only be allowed from trusted domains. Servers must validate the Origin header and only allow requests from trusted domains 
+The Access-Control-Allow-Origin header specifies which domains can access the server’s resources. It must be set to a specific domain or a list of domains, rather than using the wildcard character “*”. 
+CORS must only be enabled for the necessary resources and not for the entire server. This helps limit the attack surface and reduce the potential for security vulnerabilities. 
+Access-Control-Allow-Headers must contain a list of headers and not “*”.  
+Access-Control-Allow-Methods must contain a list of HTTP methods and not “*”.
+The Access-Control-Allow-Credentials header specifies whether the server allows cookies or other credentials to be sent with CORS requests. This must only be set to “true” if the server needs to receive cookies or other credentials from the requesting domain. 
