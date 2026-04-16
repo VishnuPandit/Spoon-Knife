@@ -1,0 +1,121 @@
+405-00-001	Middleware Workload Placement	
+Where applicable, the current Middleware Workload Placemat should be referenced to identify utilization of appropriate enterprise tooling based on organizational alignment.
+
+Steps:
+
+Find your business unit / functional area in column 1.
+Determine use case (BPM, Service, API, or Messaging)
+Not sure or have questions? Ask an Architect
+Follow business unit and use case to a solution.
+Follow the technical tooling track to build your Middleware component.
+Note: Workload Placemat represents existing state – i.e., the placemat should recommend where teams are already building, and there should not be any change to existing development process.
+
+If placemat is giving a different result than expected, kindly request a consultation from the Middleware Governance team.
+
+Middleware Workload Placemat	
+1
+2.4
+
+405-01-001	API - Architecture Style	
+Restful and GraphQL API are preferred. Simple Object Access Protocol (SOAP), WSDL-style integration should be avoided.
+
+N/A	5
+405-01-002	API - Authentication	
+Authentication for all API/Middleware components must comply with the API/Middleware Security Requirements detailed in the Information Security Technology Usage Guidelines (800-05-004).
+
+Information Security Technology Usage Guidelines	
+INFO
+
+405-01-003	API - Secrets Management	
+Secrets Management for all API/Middleware components must comply with the API/Middleware Security Requirements detailed in the Information Security Technology Usage Guidelines (800-*).
+
+Information Security Technology Usage Guidelines	
+INFO
+
+405-01-004	API - Tokens	
+Access Management Tokens for all API/Middleware components must comply with the API/Middleware Security Requirements detailed in the Information Security Technology Usage Guidelines (800-05-006).
+
+Information Security Technology Usage Guidelines	
+INFO
+
+405-01-008	API - Role Based Access Control	
+Role Based Access Control for all API/Middleware components must comply with the API/Middleware Security Requirements detailed in the Information Security Technology Usage Guidelines (800-05-005).
+
+Information Security Technology Usage Guidelines	
+INFO
+
+405-01-010	API - Network Load Balancers	
+If the target for APIs is load balancers that front backend services, the following requirements must be enforced:
+
+Endpoint health checks must be implemented to support failover, high availability requirements and balance load.
+TLS 1.2+ must be used and the certification validation must be performed at the load balancer level to verify HTTPS traffic (if Service Mesh is not used). 
+N/A	2.2
+2.8.1
+5
+405-01-011	API - Cross-Origin Resource Sharing (CORS)	
+Cross-Origin Resource Sharing for all API/Middleware components must comply with the API/Middleware Security Requirements detailed in the Information Security Technology Usage Guidelines (800-05-007).
+
+Information Security Technology Usage Guidelines	INFO
+405-01-012	API - Input Processing	
+User input must be validated, filtered, and sanitized to only allow valid data value, parameters, data types, and data patterns. This helps to protect against common vulnerabilities such as XSS, SQL Injection, Command injection, etc.
+The Host header in the request must be validated to ensure that it matches the hostname of the API being called.
+N/A	5
+405-01-013	API - Output Creation	
+Output must be well formed, clear, and concise using the proper libraries.
+Sensitive data such as credentials, passwords, security tokens, and API keys must not be returned in the URL or response.
+API response payload schemas (API operations and methods (e.g. data model, output parameters, endpoints, authentication methods, etc.), including error responses, must be defined and enforced to avoid valuable information from being sent back to attackers.
+N/A	5
+405-01-014	API - Rate Limiting	
+API must be implemented with Rate limiting policies for different API endpoints based on factors such as the type of request, user type, subscription plan, or API usage tiers.
+Quotas must be enforced to limit the number of resources a single API call can consume.
+Unauthenticated users must never be able to consume resources on the server unless the API is an open public API available to all users.  
+If a request exceeds a resource limit the request must be rejected.
+A maximum amount of the following resources required to satisfy a request must be appropriately set. This includes, but not limited to:
+Execution Timeouts
+Max allocable memory
+Number of file descriptors
+Number of processes
+Request payload size
+Number of requests per client/resources
+Number of records per page to return in a single request response
+N/A	2.8
+5
+405-01-015	API - Logging & Monitoring Requirements	
+Enable logging at both the API gateway and service level to log user behaviors to support the detection of suspicious behavior. (e.g. failed login attempts, denied access, token reuse, unauthorized access attempts, endpoint enumeration, input validation errors, crashes, core dumps, unsecured deserialization, etc.).
+Sensitive data such as access tokens, secret tokens, client secrets, PII, etc., must not be stored in logs.
+Further security logging requirements are detailed in the Information Security Technology Usage Guidelines (800-05-001).
+
+Information Security Technology Usage Guidelines	
+5
+6.6
+
+405-01-016	API - Security Processing	
+Enforce authentication on all endpoints to prevent broken authentication process.
+
+Further Data Protection Criteria are detailed in the Information Security Technology Usage Guidelines (800-05-002).
+
+Information Security Technology Usage Guidelines	
+2.2
+5
+
+405-01-017	API - Performance Optimization	
+Where possible, API optimization best practices must be in place including implementing caching mechanisms, optimizing database queries, minimizing unnecessary data transfer, leveraging Content Delivery Networks (CDNs), and using load balancing to distribute traffic effectively.
+
+N/A	2.8
+5
+405-01-018	API - Change Communication	
+Any type of “breaking change” which will require existing consumers to modify their codebase to continue, should be communicated extensively and provide a roadmap for rollout of the change
+
+N/A	INFO
+405-01-050	API - Gateway Requirements	
+Bank APIs published for reuse must be front ended by a bank approved API gateway.
+Excludes APIs used only by components within a single contained system or service mesh.
+All inbound API traffic from the internet or B2B partners must route through a bank approved API gateway.
+Outbound API traffic from an internal bank source to an external destination may use an API gateway as a proxy, but it is not required.
+Review API Gateway Best Practices and API Gateway Decision Matrix for more information.
+For all other scenarios refer to API Gateway Best Practices and API Gateway Decision Matrix.
+API Gateway Best Practices
+
+API Gateway Decision Matrix	2.1
+2.2
+5
