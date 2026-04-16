@@ -1,0 +1,42 @@
+## Draw.io CSV Import Configuration
+# label: <b style="font-size:14px">%name%</b><br><hr style="border: 1px solid #ccc;"><i style="font-size:11px">%desc%</i>
+# style: whiteSpace=wrap;html=1;rounded=1;fillColor=%fill%;strokeColor=#1f4e78;fontColor=%fontColor%;align=center;verticalAlign=middle;collapsible=1;treeFolding=1;
+# namespace: csvimport-
+# connect: {"from": "parent", "to": "id", "invert": true, "style": "edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1f4e78;"}
+# width: 180
+# height: 65
+# layout: horizontalflow
+# nodespacing: 15
+# levelspacing: 70
+## CSV Data
+id,name,desc,fill,fontColor,parent
+root,Integration Metamodel,Enterprise Governance,#1f4e78,#ffffff,
+L1,L1: Boundary Context,WHERE does it live?,#deeaf6,#000000,root
+L1_NS,North-South,External / Edge,#ffffff,#000000,L1
+L1_EW,East-West,Cross-Core,#ffffff,#000000,L1
+L1_ID,Intra-Domain,Microservice Local,#ffffff,#000000,L1
+L2,L2: Architecture Layer,WHY are we doing this?,#deeaf6,#000000,root
+L2_EXP,Experience,UI / Channel,#ffffff,#000000,L2
+L2_PROC,Process,Orchestration,#ffffff,#000000,L2
+L2_SYS,System,Core Abstraction,#ffffff,#000000,L2
+L2_FAB,Data Fabric,State Sync,#ffffff,#000000,L2
+L3,L3: Interaction Style,WHEN does it move?,#deeaf6,#000000,root
+L3_SYNC,Synchronous,Blocking (Immediate),#ffffff,#000000,L3
+L3_ASYNC,Async Targeted,Command (Point-to-Point),#ffffff,#000000,L3
+L3_EVT,Event-Driven,Broadcast (Facts),#ffffff,#000000,L3
+L3_PULL,Deferred,Pull / Batch,#ffffff,#000000,L3
+L4,L4: Logical Pattern,HOW is it structured?,#deeaf6,#000000,root
+L4_AG,API Façade / BFF,Aggregator Gateway,#ffffff,#000000,L4
+L4_SAGA,Saga Pattern,Async Req-Reply,#ffffff,#000000,L4
+L4_PS,Pub-Sub / CQRS,State Distribution,#ffffff,#000000,L4
+L4_ACL,Anti-Corruption,Legacy Isolation,#ffffff,#000000,L4
+L5,L5: Standard Protocol,WHAT is the standard?,#deeaf6,#000000,root
+L5_REST,REST / GraphQL,HTTP/1.1 Standard,#ffffff,#000000,L5
+L5_GRPC,gRPC / Protobuf,HTTP/2 Binary,#ffffff,#000000,L5
+L5_KAF,Kafka / AMQP,Messaging Streams,#ffffff,#000000,L5
+L5_FILE,SFTP / Webhooks,File / Push Triggers,#ffffff,#000000,L5
+L6,L6: Approved Platform,WHICH tool is used?,#deeaf6,#000000,root
+L6_L7,Broadcom Layer7,Strategic: Edge Gateway,#e2efda,#006100,L6
+L6_K8S,K8s (Spring/Go),Strategic: Orchestration,#e2efda,#006100,L6
+L6_MSG,Kafka / IBM MQ,Strategic: Messaging,#e2efda,#006100,L6
+L6_LEG,TIBCO / MuleSoft,Legacy Containment,#ffc7ce,#9c0006,L6
