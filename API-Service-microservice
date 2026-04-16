@@ -1,0 +1,204 @@
+API-Services-Microservices Landscape
+•
+Ecosystem
+•
+Current API definition evaluation will need to be done to see if the current way of defining an API will match with the future state of API inventory
+•
+In a complex enterprise environment, it is often confusing to differentiate between an API, a service, and a microservice, especially when the same component may be labelled differently depending on how it’s used. This leads to common questions around where to draw the boundaries and whether a single component can be considered an API, a service, or both in different contexts.
+•
+The environment typically spans on-prem and cloud deployments in a multi-cloud, hybrid model using platforms such as AWS and Azure. It includes SAAS solutions like Salesforce and ServiceNow, monitoring tools such as Datadog and Splunk, and internally built technologies such as NodeJS, Spring Boot, TIBCO BusinessWorks, or Pega. CI/CD tools like GitLab and Azure DevOps, centralized security via Okta, containerized workloads on Docker or Kubernetes, and APIs (as we know) managed through gateways like Apigee or Layer7 or MuleSoft (added at the edge for inbound and outbound traffic control) are all par to four ecosystems.
+•
+North-east traffic, refers to external interactions—inbound when external consumers access our APIs through gateways, and outbound when our applications call vendor-hosted APIs over the internet. South-west traffic represents internal-only communication between services within the organization, often running on Docker or Kubernetes or on applications hosting environments such as WebSphere application server. For containerized applications internal paths, a service mesh, such as Istio's may be added to manage service-to-service communication, security, observability, and traffic policies without embedding that logic into each service.
+•
+Given this complexity of layered and distributed environment, having clear and practical definitions for APIs, services, and microservices, and the traffic patterns they participate in is essential for consistent design, governance, architecture and communications across teams.
+
+Real-life analogy for api/service/microservice
+•
+Ecosystem
+Concept
+Car
+Restaurant
+Executive Director
+Payment Processing
+API:
+An API is created only when a service need be accessed—by users, systems, partners, or external organizations.
+Steering wheels, pedals, dashboard controls
+Menu, order counter, water taking order
+Formal touchpoints: board meetings, reports, approvals and escalations
+Payment initiation channels: mobile app, online banking, partner integrations
+Examples: Payment initiation API, Customer Profile API, etc.
+Service:
+It is the foundation. A service exists whenever the organization does something of value—it is manual, automated, internal, or external.
+Transportation—getting from place to place safely and reliably
+Providing food and dining experience
+Overall function the executive director is accountable for
+The bank’s payment service –moving money securely and on time.
+Examples:
+Payment Settlement, Identity Verification, Reporting and analytics.
+Microservice:
+A microservice is a service that has been designed to operate independently, with its own deployment, scaling, and lifecycle.
+Independent systems: engine, brakes, navigation, battery
+Kitchen stations: grill, desserts, drinks, prep
+Senior directors independently running sub functions
+Independent payment components: fraud checks, validation, routing, settlement
+Example: Fraud detection service is scaled independently
+
+API-Services-Microservices Dimension
+•
+Service (Service View - Capability dimension):
+•
+A logical business or technical capability.
+•
+A Service may exist without any API
+•
+A service may be implemented without microservices architecture.
+•
+If you are talking about “what business/technical function does it provide?”→ it’s a service.
+•
+API (API View - interface dimension):
+•
+A well-defined contract for interaction
+•
+Every API is backed by a service. If there is an API, means some service exists.
+•
+Not every service is exposed via an API.
+•
+If you are talking about endpoints, contracts, schemas→ it’s an API.
+•
+Microservice (Microservice view – Architecture dimension):
+•
+A service implemented using microservice architecture principles
+•
+Every microservice is a service
+•
+Many services are not microservices e.g., shared platforms, SaaS, workflows, monoliths)
+•
+If the deployable unit is independently scalable and deployable → it’s a microservice.
+Summary: A microservice is a way to implement and operate a service; an API is how that service is accessed.
+
+API (Interface Contract) Definition
+Definition: A versioned, documented interface that defines how a capability is accessed by API client.
+Key API Criteria:
+•
+Explicit contract (e.g., OpenAPI, GraphQL SDL, gRPC proto, event schema)
+•
+Authentication/authorization policy (e.g., OAuth2/OIDC via Okta, mTLS)
+•
+Versioning strategy (e.g., URI version, header, or schema version)
+•
+Lifecycle: design → publish → deprecate → retire, with consumer communication
+•
+Discoverability via API catalog and/or gateway (Apigee, Layer7, MuleSoft)
+•
+Non-functional policies enforced (rate limits / quotas, payload size, logging, PII handling, routing rules, security policies, transformation etc. (no business logic)
+Note:
+•
+An API has deployable middleware code; it is the contract exposed by one or more services.
+•
+API is like a class definition, schema definition, template etc., that describes about input, output, endpoints etc. Once you create class to get an instance (which is runtime), that becomes service.
+
+Service (Business Capability) Definition
+Definition: A service implements a business capability which defines a stable, high-level function or capacity to deliver value.
+Key Attributes:
+•
+Named by capability (e.g., Identity federation, Payment Processing, Customer Profile etc.)
+•
+Clear ownership (team, on-call, escalation path, SLA)
+•
+Interface(s): One or more APIs or events.
+•
+Boundary: well-defined inputs/outputs and data stewardship
+•
+Lifecycle: roadmap, change management, deprecation, incident postmortems
+Note: A service may be implemented as a monolith, a microservice, a workflow (Tibco/Pega), or via SaaS (Salesforce/ServiceNow). The term reflects responsibility, not implementation.
+
+Microservice (Architectural & Operational Style): Definition
+Definition: A service implemented as an independently deployable and operable unit, typically containerized and orchestrated.
+Key attributes:
+•
+Independent deployment (no lock-step releases with other services)
+•
+Owns its data (private schema or bounded-context ownership
+•
+Loose coupling (contacts stable; changes don’t cascade
+•
+Operational autonomy (separate CI/CD, scaling, rollback)
+•
+Runtime isolation (e.g., Docker, Kubernetes on AKS/EKS/on-prem)
+•
+Observability (metrics, logs, traces;)
+Note: Exposing an API does not make a component a microservice. Independence and Operability do.
+
+API – Service – Microservice Definitions (FFIEC/NIST/Bank)
+Concept
+FFIEC
+FFIEC IT Examination Handbook InfoBase - Glossary
+NIST
+Glossary | CSRC
+Bank
+API
+•
+A system access point or library function that has a well-defined syntax and is accessible from application programs or user code to provide well-defined functionality.
+•
+Software code that allows two or more different programs to communicate with each other.
+A system access point or library function that has a well-defined syntax and is accessible from application programs or user code to provide well-defined functionality.
+A versioned, documented interface that defines how a capability is accessed by API client
+Service
+No clear definition available: A service is software unit that performs specific business or technical functions and exposes its capabilities to other applications or systems via an API, allowing them to interact with it without knowing its internal implementation.
+A software component participating in a service-oriented architecture that provides functionality or participates in realizing one or more capabilities.
+A service implements a business capability which defines a stable, high-level function or capacity to deliver value.
+Microservice
+A set of containers that work together to compose an application.
+A set of containers that work together to compose an application.
+A service implemented as an independently deployable and operable unit, typically containerized and orchestrated.
+
+Concept
+Brokerage Business Transaction
+Payment Initiation
+API:
+An API is created only when a service need be accessed—by users, systems, partners, or external organizations.
+Layer7 Service:
+DMZ GW: /directbanking/v1/brokerage/*
+SZ GW:
+/v1/brokerage*
+APM0001061 APIGEE:
+Channels: xxxx Go, API Banking and TAG systems
+https://internal.api.xxxx.com/v4/payment/payment-initiations
+-- /v4/payment/payment-intiations
+Service:
+It is the foundation. A service exists whenever the organization does something of value—it is manual, automated, internal, or external.
+Tibco BusinessWorks:
+Service (Resource): Brokerage-Accounts
+Service Path: /brokerage/accounts
+Referred Services:
+•
+Call Pershing,
+•
+Write to Splunk
+APM0001371
+PaymentInit (a lamda function)
+api.corepaymentservices-prod.aws.xxxxx.com/v1/payment/payment-initiations
+(/v4/payment/payment-intiations)
+Microservice:
+A microservice is a service that has been designed to operate independently, with its own deployment, scaling, and lifecycle.
+N/A
+PaymentOrder
+TransformationService
+NotificationService
+WSSFacade, etc.
+
+
+API – Service – Microsevice definitions history
+API:
+•
+A versioned, documented interface that defines how a capability is accessed by a consumer.
+•
+A versioned, documented interface that defines how a capability is accessed by API client.
+Service:
+•
+A logical capability that a team owns and is accountable for (business or technical). It answers what the system does, independent of technology.
+•
+A service implements a business capability which defines a stable, high-level function or capacity to deliver value.
+Microservice:
+•
+A service implemented as an independently deployable and operable unit, typically containerized and orchestrated.
