@@ -1,0 +1,151 @@
+This catalog provides an index of DevSecOps playbooks that define operational, security, platform, and adoption practices for GitLab SaaS as an enterprise solution. It serves as a single reference point for Platform, Adoption& enablement, SRE, and application teams.
+
+Playbook Area
+
+Purpose
+
+Owner
+
+SRE Playbook
+
+Guides incident response, pipeline reliability, observability, and disaster recovery.
+
+DSO-SRE Lead
+
+Platform Engineering Playbook
+
+Defines GitLab SaaS provisioning, access, repository standards, pipeline templates, integrations, and operations.
+
+Platform Engineering Lead
+
+Adoption & Enablement Playbook
+
+Provides onboarding workflows, security champions model, developer productivity practices, and adoption metrics.
+
+Adoption & Enablement Lead
+
+DSO Security Automation Playbook
+
+Covers pipeline security controls, OSS governance, vulnerability management, and secrets handling.
+
+Security Automation Lead
+
+Usage Guidance
+Each playbook can be referenced individually, but the catalog ensures that DevSecOps practices are viewed holistically across SRE, Platform Engineering, Adoption & Enablement, and Security Automation.
+
+This catalog should be maintained as a living document and updated as playbooks evolve with new controls, metrics, and adoption patterns.
+
+Platform Engineering Playbook (Framework)
+This playbook provides guidance for managing GitLab SaaS as an enterprise platform. It defines provisioning, access, standards, integrations, operations, and governance practices to ensure secure, reliable, and compliant usage across the bank.
+
+Platform Provisioning & Setup
+Tenancy setup (GitLab Dedicated / SaaS instance).
+Runner architecture (shared vs dedicated runners).
+Network/security setup (VPC peering, firewall, IP allowlists).
+High availability / scaling guidance.
+Access & Identity Management
+Integration with SSO/MFA
+Role-based access model (Owner, Maintainer, Developer, Auditor, Administrator).
+Onboarding/offboarding procedures.
+Quarterly access review checklist.
+Repository & Project Standards
+Naming conventions (groups, repos, projects).
+Branching models (mainline vs feature branching).
+Default settings (protected branches, merge rules).
+Artifact retention & clean-up policies.
+Pipeline Templates & Golden Paths
+Central library of pre-approved pipeline templates (build, test, deploy).
+Security stage templates (SAST, SCA, container scans).
+Infrastructure-as-Code templates (Terraform, Helm).
+Enforcement guidance (inheritance via parent pipelines).
+Integration & Toolchain Alignment
+Integration with logging/monitoring (Splunk, Dynatrace).
+Secrets vault integration (CyberArk, HashiCorp Vault).
+Package registry & dependency proxy configuration.
+Integration with change management (CAB/pre-CAB workflows).
+Operations & Maintenance
+Upgrade strategy (monthly SaaS updates, feature rollouts).
+Backup & restore for critical artifacts.
+Service health monitoring & alerting.
+Cost & usage optimization (runner utilization, storage).
+DevSecOps Adoption & Enablement Playbook (Framework)
+This playbook provides guidance for onboarding, training, and enabling developers across Lines of Business (LOBs) to adopt GitLab SaaS securely and efficiently.
+
+Onboarding & Training
+Standard onboarding workflow for new repos/teams into GitLab SaaS.
+Training curriculum (secure coding, pipeline usage, GitLab templates).
+Self-service learning modules.
+Security Champions Network
+Role definition for Security Champions in each LOB.
+Responsibilities (advocacy, escalation, feedback loop).
+Incentives and recognition model.
+Developer Productivity & Experience
+Use of golden templates to reduce friction.
+Guidance on shift-left testing (unit, integration, SAST, SCA).
+Feedback loop → developer surveys, productivity metrics.
+Adoption Metrics & Dashboards
+% of LOB apps onboarded to GitLab SaaS.
+% of pipelines with security scans enabled.
+Training completion metrics.
+NPS/feedback scores from developers.
+Communications & Engagement
+Monthly DSO updates to LOBs.
+Office hours, community of practice.
+Documentation hubs & FAQs.
+DevSecOps Security Automation Playbook (Framework)
+This playbook defines how security controls are embedded into CI/CD pipelines, governing OSS usage, vulnerability management, and secrets handling in GitLab SaaS.
+
+Security Controls in Pipelines
+Mandatory stages: SAST, SCA, Container Scan, DAST.
+Secrets detection & blocking.
+Policy-as-code for enforcement.
+OSS / Package Governance
+Use of GitLab Dependency Proxy.
+Allowlist/denylist management.
+Exception workflows (CAB approval).
+License compliance scanning.
+Vulnerability Management
+Triage guide for findings.
+SLAs for remediation (critical/high/medium).
+Automated ticket creation (JIRA/ServiceNow).
+Dashboarding vulnerability backlog.
+Secrets & Credential Management
+Vault integrations (CyberArk, HashiCorp Vault).
+Automated secrets rotation policies.
+Alerts on leaked secrets.
+Metrics & Reporting
+% of pipelines passing security scans.
+% of repos with no secrets exposed.
+MTTR for vulnerabilities.
+OSS usage compliance score.
+DevSecOps–SRE Playbook Framework
+This framework defines the structure and content areas for DevSecOps–SRE playbooks. Each playbook serves as a repeatable guide to ensure secure, reliable, and compliant operations across GitLab SaaS pipelines and related services.
+
+Pipeline Reliability & Incident Response
+Pipeline Failure Runbooks – what to do if CI/CD jobs fail (build/test/deploy).
+Shadow Pipeline vs Prod Pipeline Troubleshooting – escalation flows.
+Secrets Leakage Incident Response – detect, revoke, rotate, and notify.
+Rollback / Recovery – how to roll back failed deployments in SaaS.
+Critical Incident Comms – who to page, escalation paths, SLAs.
+Security Monitoring & Controls
+SAST/SCA/DAST Triage Guide – severity thresholds, ownership (AppSec vs DSO vs Dev teams).
+Vulnerability Remediation Playbook – MTTR goals, ticket routing.
+OSS Package Governance Playbook – blocklists, allowlists, exception workflows.
+Secrets Management Playbook – vault integration, rotation policies.
+Observability & Metrics (DORA + Security KPIs)
+Log Ingestion Guide – how GitLab logs are routed to Splunk/Dynatrace.
+Alert Tuning Guide – what alerts to auto-close vs escalate.
+Metrics Playbook – deployment frequency, lead time, change failure rate, MTTR, % pipelines with security stages enabled.
+Dashboards – standard Splunk/Dynatrace queries, Grafana boards.
+Change & Risk Management Alignment
+Pre-CAB Checklist – what evidence is required for GitLab SaaS changes.
+Exception Handling Playbook – when teams can bypass scans, how to log risk.
+Audit Evidence Playbook – how to collect logs, scan reports, and access reviews.
+Adoption & Developer Enablement
+Golden Pipeline Templates – reusable YAMLs for builds, scans, deploys.
+Security Champion Playbook – roles, responsibilities, escalation path.
+Onboarding Playbook – steps for new apps to adopt GitLab SaaS pipelines.
+Disaster Recovery & Business Continuity
+Backup & Restore Procedures – artifacts, logs, pipeline history.
+Failover Playbook – runner outages, SaaS downtime scenarios.
+Continuity Testing Guide – tabletop exercises, chaos testing.
