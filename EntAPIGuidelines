@@ -1,0 +1,7 @@
+create the Enterprise API guidelines 
+As I have mentioned in the past, I really think it would be beneficial to create a matrix containing the individual guidelines and the various types of APIs (e.g. system, experience, public, etc.) as we have defined them.  The output should be a matrix that makes it very clear which guidelines each type of API should follow.
+Post the completion of the above, we will need to discuss the criticality of each (I believe item #2 will assist with this as I believe we will end up with regulatory and risk mitigation guidelines that will apply to all APIs).
+Then….Enforcement
+Where and How?
+How do we balance net new with existing deployments?
+Hard stop, warning, exception process, etc.
