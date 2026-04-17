@@ -1,0 +1,257 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2869
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\froman\fcharset0 Times-Roman;
+\f3\froman\fcharset0 Times-Bold;\f4\froman\fcharset0 Times-Italic;\f5\fnil\fcharset0 LucidaGrande-Bold;
+\f6\fswiss\fcharset0 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat0\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid2\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\margl1440\margr1440\vieww30040\viewh18260\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 Point of View : Unified API Strategy using Layer 7\
+
+\f1\b0 \
+Key Assumptions :\
+\
+1. Broadcom Commercials  - Broadcom is known for increasing prices a lot\
+[300-400%. Historical data ] - Exit cost will be really high after 3-4 years.\
+2. Developer Friction - Layer 7 historically requires centralized gateway team. In today\'92s world we want federated and self (team/domain) managed model.\
+3. Hybrid and Multi-cloud - Bank will have on-prem and multi-cloud setup for next decade. We are not going 100% cloud.\
+\
+The concern - Layer-7 as strategic API gateway.\
+\pard\pardeftab720\partightenfactor0
+
+\f2 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 In a multi-cloud world, forcing Azure-native microservices to use a Layer7 "containerized" gateway adds a Java-heavy runtime, increased latency, and a proprietary policy language into a cloud-native ecosystem\
+\
+1. The GitOps and Automation Concern\
+	"How does Layer7 v11.x integrate into a multi-cloud Terraform/Crossplane workflow without creating a 'Policy Silo'? Can a developer in the Azure team deploy an API and its security policy in a single 'git push' without waiting for a Layer7 admin?"\
+	
+\f3\b \strokec2 The Problem:
+\f2\b0 \strokec2  Layer7's Graphman is a step forward, but it is still a proprietary abstraction.\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b \cf0 \strokec2 	The Solution:
+\f2\b0  If Layer7 is chosen, mandate the implementation of an 
+\f3\b API Abstraction Layer
+\f2\b0 . Use a tool-agnostic specification (like 
+\f3\b Backstage
+\f2\b0  or a custom 
+\f3\b OAS-to-Policy
+\f2\b0  engine) that allows developers to define intent, which then auto-generates the Layer7 XML/JSON. 
+\f4\i Don't let developers touch the 	Layer7 console.
+\f2\i0 \
+2. Cloud Compute cost \
+	What is the memory and CPU footprint of a Layer7 gateway instance in AWS/Azure?At 10,000 requests per second, what is our projected 'Cloud Compute cost\'92  just to run the gateway?\
+	The Problem : layer7 is a heavy gateway. Running it as a sidecar or distributed ingress in k8 is expensive and resource-intensive \
+	
+\f3\b The Solution:
+\f2\b0  Implement a 
+\f3\b Tiered Gateway Pattern
+\f2\b0 .\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440\sa240\partightenfactor0
+\ls1\ilvl1
+\f3\b \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	
+\f5 \uc0\u8259 
+\f3 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Tier 1 (The Edge):
+\f2\b0  Use Azure APIM/AWS Gateway for commodity security (DDoS, Rate Limiting, WAF).\
+\ls1\ilvl1
+\f3\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	
+\f5 \uc0\u8259 
+\f3 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Tier 2 (The Fortress):
+\f2\b0  Use Layer7 only for "Crown Jewel" APIs that require deep legacy integration (e.g., Mainframe identity propagation, complex SOAP-to-REST).\
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440\sa240\partightenfactor0
+\cf0 3. AI and Modern protocol gap\
+	As we move to AI-agentic banking, how does Layer7 handle 
+\f3\b \strokec2 LLM-specific governance
+\f2\b0 \strokec2  (e.g., token-based rate limiting, prompt injection filtering, or semantic caching)? Are we going to wait 24 months for a Broadcom patch, or build it ourselves in a tool not designed for it?\
+	
+\f3\b \strokec2 The Problem:
+\f2\b0 \strokec2  Layer7 is reactive, not proactive, regarding modern protocols like gRPC or AI-specific traffic.\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b \cf0 \strokec2 	The Solution:
+\f2\b0  Positioning Layer7 as a 
+\f3\b "Security Sidecar"
+\f2\b0  rather than the "Front Door." Use lightweight, extensible proxies for AI/Modern workloads and offload the "Audit/Compliance" logging to Layer7 via an asynchronous side-channel.\
+\
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1543\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth4720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth9016\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 \strokec2 Concern
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Technical/Operational Risk
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Mitigation Strategy
+\f1\b0 \cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1543\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth4720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth9016\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Vendor Lock-in
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+\cf0 Broadcom "squeezes" the bank on renewals; product roadmap stalls.\cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Contractual:
+\f1\b0  Demand a 5-year price cap. 
+\f0\b Architectural:
+\f1\b0  Use a "Gateway Abstraction" layer so you can swap the runtime if needed.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1543\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth4720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth9016\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Operational Bottleneck
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+\cf0 Centralized "L7 Team" becomes the slowest link in the SDLC.\cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Solution:
+\f1\b0  Implement "Self-Service Policy Fragments." Allow teams to own their logic while the Central ARB only owns the "Global Guardrails."\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1543\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth4720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth9016\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Cloud Inefficiency
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+\cf0 High latency/cost when routing intra-cloud traffic through L7 containers.\cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Solution:
+\f1\b0  "Direct-to-Cloud" routing for non-sensitive internal traffic; use L7 only for North-South "Trusted" boundaries.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1543\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth4720\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth9016\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Talent Scarcity
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+\cf0 Hard to find Layer7 specialists vs. Azure/AWS/General DevOps engineers.\cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Solution:
+\f1\b0  Treat Layer7 as 
+\f0\b "Infrastructure as Code" (IaC)
+\f1\b0 . Hide the complexity behind a CLI that the DevOps teams already use.\cell \lastrow\row
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f2 \cf0 \strokec2 \
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1333\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth6820\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth7125\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 \strokec2 Challenge Category
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 The Layer7 Reality (v11.x+)
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 The Mitigation / Solution
+\f1\b0 \cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1333\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth6820\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth7125\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Operational Velocity
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Graphman
+\f1\b0  improves GitOps, but it\'92s a proprietary wrapper. Policy creation remains a specialist silo.\cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Solution:
+\f1\b0  Abstract the gateway. Mandate "Backstage" as the developer portal to hide L7 complexity.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1333\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth6820\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth7125\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Cloud Economics
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+\cf0 Running "heavy" Java-based L7 containers in Azure/AWS is 3x more expensive in compute than native proxies.\cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Solution:
+\f1\b0  Use 
+\f0\b Federated Ingress
+\f1\b0 . Use Cloud-native gateways for intra-cloud and L7 
+\f6\i only
+\f1\i0  for "Crown Jewel" egress.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1333\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth6820\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth7125\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Vendor Risk
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Broadcom Playbook:
+\f1\b0  Historically high price hikes and potential roadmap stagnation post-acquisition.\cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Solution:
+\f1\b0  Architectural decoupling. Avoid using "Proprietary Assertions" in L7; keep logic in code/standard OAS.\cell \row
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \tamarb640 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth1333\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx2880
+\clvertalc \clshdrawnil \clwWidth6820\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx5760
+\clvertalc \clshdrawnil \clwWidth7125\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrs\brdrw20\brdrcf2 \clbrdrl\brdrs\brdrw20\brdrcf2 \clbrdrb\brdrs\brdrw20\brdrcf2 \clbrdrr\brdrs\brdrw20\brdrcf2 \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Modern Protocols
+\f1\b0 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+\cf0 gRPC and AI-Agentic traffic handling is reactive/bolted-on compared to cloud-native or Envoy tools.\cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Solution:
+\f1\b0  Implement a 
+\f0\b Sidecar Pattern
+\f1\b0  for modern workloads, using L7 only for final audit/compliance logging.\cell \lastrow\row
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f2 \cf0 \strokec2 \
+\
+\
+}
